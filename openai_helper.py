@@ -1,15 +1,12 @@
 import openai
 import pandas as pd
 import numpy as np
-import pickle
 from transformers import GPT2TokenizerFast
 from typing import List, Dict, Tuple
-import requests
-import json
-import nltk
-from urllib.request import urlopen
+import os
 
-openai.api_key = "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"
+
+openai.api_key = os.environ["openai_key"]
 
 
 MODEL_NAME = "curie"
@@ -65,7 +62,7 @@ def load_embeddings(fname: str, actual_file) -> Dict[Tuple[str, str], List[float
            (r.title, r.heading): [r[str(i)] for i in range(max_dim + 1)] for _, r in new_df.iterrows()
     }, new_df
 
-def load_embeddings2(df, df1) -> Dict[Tuple[str, str], List[float]]:
+def generate_newdfs(df: pd.DataFrame, df1: pd.DataFrame) -> Dict[Tuple[str, str], List[float]]:
     """
     Read the document embeddings and their keys from a CSV.
 
@@ -73,7 +70,10 @@ def load_embeddings2(df, df1) -> Dict[Tuple[str, str], List[float]]:
         "title", "heading", "0", "1", ... up to the length of the embedding vectors.
     """
     new_df = df1.merge(df, left_index=True, right_index=True)
-    return new_df
+    max_dim = max([int(c) for c in new_df.columns if c != "title" and c != "heading" and c != 'content' and c != 'tokens'])
+    return {
+           (r.title, r.heading): [r[i] for i in range(max_dim + 1)] for _, r in new_df.iterrows()
+    }, new_df
 
 def vector_similarity(x: List[float], y: List[float]) -> float:
     """
