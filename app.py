@@ -27,7 +27,7 @@ with st.container():
         )
 
 st.sidebar.subheader("Parámetros")
-temperature = st.sidebar.slider('Temperatura: Controla la creatividad de la respuesta, 0 significa una respuesta muy directa, mientras que 1 sera una respuesta muy aletoria y creativa.', 0.0, 1.0, 0.5)
+temperature = st.sidebar.slider('Temperatura: Controla la creatividad de la respuesta, 0 significa una respuesta muy directa, mientras que 1 sera una respuesta muy aletoria y creativa.', 0.0, 1.0, 0.0)
 max_length = st.sidebar.slider('La longitud máxima de tokens a utilizar en la respuesta', 0, 700, 350)
 
 # create a file upload component and prompt the user to upload a PDF file
@@ -74,7 +74,7 @@ if file is not None:
         with st.container():
             st.write("---")
             st.subheader("Pregunta lo que quieras")
-            label = "Enter your question here"
+            label = "Introduce tu pregunta"
             prompt = st.text_input(label, key="prompt_input", placeholder=None)
             temperature = temperature
             max_length = max_length
